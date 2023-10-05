@@ -1,0 +1,113 @@
+from socket import *
+import threading
+import random
+
+
+#Sætter variable
+serverPort = 12000
+serverSocket = socket(AF_INET,SOCK_STREAM)
+serverSocket.bind(('', serverPort))
+serverSocket.listen(1)
+
+print ('Server is ready to recieve')
+
+
+#Metode 
+def  handleClient(connectionSocket,adress):
+    connectionSocket.send('Type "Random" or "Calculator" to start the function'.encode())
+    sentence=connectionSocket.recv(1024).decode().lower()
+    txtRecieved='From Client {addr}: ',sentence
+    txtString=str(txtRecieved)
+    txtStart=txtString.format(addr=addr)
+    print (txtStart)
+    connectionSocket.send(' '.encode())
+    
+ 
+    if 'random' in sentence:
+        handleRandom(connectionSocket,addr)
+    
+    elif 'calculator' in sentence:
+        handleCalculator(connectionSocket,addr)
+    
+    else:
+        handleWrongCommand(connectionSocket,addr)
+
+    
+def handleClose(connectionSocke,adress):
+    connectionSocket.send('Connection ended'.encode())
+
+
+def handleRandom(connectionSocket,adress):
+    connectionSocket.send('Please type 2 number with space between fx:"1 10"'.encode())
+    sentence=connectionSocket.recv(1024).decode()
+    txtRecieved=' from client ({addr}: ', sentence
+    txtString=str(txtRecieved)
+    txtStart=txtString.format(addr=addr)
+    print(txtStart)
+
+    num1 = int(sentence.split(' ')[0])
+    num2 = int(sentence.split(' ')[1])
+    num = random.randrange(num1,num2)
+    numStr = (f'The random number between {num1} and {num2} is: >>{num}<<')
+    print(f'Random number for client is: {num}')
+
+    connectionSocket.send(numStr.encode())
+    handleClose(connectionSocket,addr)
+    print('Client connection closed:',addr)
+    connectionSocket.close()
+
+def handleCalculator(connectionSocket,adress):
+    connectionSocket.send('This function can Add and Substract. Please write your command as fx:"Add 2 5" or "Substract 4 5'.encode())
+    sentence=connectionSocket.recv(1024).decode()
+    txtRecieved='From client {addr}: ', sentence
+    txtString=str(txtRecieved)
+    txtStart=txtString.format(addr=addr)
+    print (txtStart)
+
+    a=int(sentence.split(' ')[1])
+    b=int(sentence.split(' ')[2])
+
+    txt='The {calc} of {num1} {x} {num2} = {result}'
+    txtCalc=''
+
+    if 'Add' in sentence:
+        y=a+b
+        txtCalc=txt.format(calc='addition',num1=a,x='+',num2=b,result=y)
+        print (txtCalc)
+
+
+    elif 'Substract' in sentence:
+        y=a-b
+        txtCalc=txt.format(calc='substraction', num1=a, x='-', num2=b, result=y)
+        print(txtCalc)
+
+    connectionSocket.send(txtCalc.encode())
+    handleClose(connectionSocket,addr)
+    print('Client connection closed:',addr)
+    connectionSocket.close()
+
+def handleWrongCommand(connectionSocket,address):
+        connectionSocket.send('You did not type a correct command. Try again'.encode())
+        handleClose(connectionSocket,addr)
+        print('Client did not give correct command',addr)
+        print('Connection close for client',addr)
+        connectionSocket.close()
+
+
+
+#While loop til flere clienter
+print('The server is ready to recieve')
+while True:
+    connectionSocket, addr = serverSocket.accept() 
+    print ('Client connection from address:',addr)
+    threading.Thread(target=handleClient,args=(connectionSocket,addr)).start()
+    
+  
+
+
+
+
+
+
+
+
