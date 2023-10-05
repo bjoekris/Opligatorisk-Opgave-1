@@ -2,7 +2,6 @@ from socket import *
 import threading
 import random
 
-
 #Sætter variable
 serverPort = 12000
 serverSocket = socket(AF_INET,SOCK_STREAM)
@@ -94,7 +93,6 @@ def handleWrongCommand(connectionSocket,address):
         connectionSocket.close()
 
 
-
 #While loop til flere clienter
 print('The server is ready to recieve')
 while True:
@@ -103,7 +101,6 @@ while True:
     threading.Thread(target=handleClient,args=(connectionSocket,addr)).start()
     
   
-
 
 
 
