@@ -1,0 +1,38 @@
+from socket import *
+
+#sætter nogle variable
+serverName = '127.0.0.1'
+serverPort=12000
+
+clientSocket = socket(AF_INET,SOCK_STREAM)
+clientSocket.connect((serverName,serverPort))
+
+
+#Modtager infor fra server 2
+dataModtag = clientSocket.recv(2048)
+sentenceTilbage = dataModtag.decode()
+print('Modtager tekst ', sentenceTilbage)
+
+
+#Serder besked til server 1
+sentence = input ('Indtast linje: ')
+data = sentence.encode()
+clientSocket.send(data)
+
+
+#Modtager svar fra server 2
+dataModtag2 = clientSocket.recv(2048)
+sentenceTilbage = dataModtag2.decode()
+print('Modtager tekst ', sentenceTilbage)
+
+
+#Sender besked til server 2
+sentence = input ('Indtast linje: ')
+data = sentence.encode()
+clientSocket.send(data)
+
+
+#Modtager svar fra server 3
+dataModtag3 = clientSocket.recv(2048)
+sentenceTilbage = dataModtag3.decode()
+print('Modtager tekst ', sentenceTilbage)

@@ -10,7 +10,6 @@ serverSocket.listen(1)
 
 print ('Server is ready to recieve')
 
-
 #Metode 
 def  handleClient(connectionSocket,adress):
     connectionSocket.send('Type "Random" or "Calculator" to start the function'.encode())
@@ -19,7 +18,7 @@ def  handleClient(connectionSocket,adress):
     txtString=str(txtRecieved)
     txtStart=txtString.format(addr=addr)
     print (txtStart)
-    connectionSocket.send(' '.encode())
+    
     
  
     if 'random' in sentence:
@@ -55,6 +54,7 @@ def handleRandom(connectionSocket,adress):
     print('Client connection closed:',addr)
     connectionSocket.close()
 
+
 def handleCalculator(connectionSocket,adress):
     connectionSocket.send('This function can Add and Substract. Please write your command as fx:"Add 2 5" or "Substract 4 5'.encode())
     sentence=connectionSocket.recv(1024).decode()
@@ -85,12 +85,13 @@ def handleCalculator(connectionSocket,adress):
     print('Client connection closed:',addr)
     connectionSocket.close()
 
+
 def handleWrongCommand(connectionSocket,address):
-        connectionSocket.send('You did not type a correct command. Try again'.encode())
-        handleClose(connectionSocket,addr)
-        print('Client did not give correct command',addr)
-        print('Connection close for client',addr)
-        connectionSocket.close()
+    connectionSocket.send('You did not type a correct command. Try again'.encode())
+    handleClose(connectionSocket,addr)
+    print('Client did not give correct command',addr)
+    print('Connection close for client',addr)
+    connectionSocket.close()
 
 
 #While loop til flere clienter
