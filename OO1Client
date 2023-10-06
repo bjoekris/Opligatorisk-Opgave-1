@@ -1,6 +1,6 @@
 from socket import *
 
-#sætter variable
+#Sætter variable
 serverName = '127.0.0.1'
 serverPort=12000
 
@@ -8,31 +8,37 @@ clientSocket = socket(AF_INET,SOCK_STREAM)
 clientSocket.connect((serverName,serverPort))
 
 
-#Modtager info fra server 1
+#Modtager første info fra server (Guide til keywords/metoder)
 dataModtag = clientSocket.recv(2048)
 sentenceTilbage = dataModtag.decode()
 print('Modtager tekst ', sentenceTilbage)
 
 
-#Serder besked til server 1
+#Klienten keyword/metode til serveren
 sentence = input ('Indtast linje: ')
 data = sentence.encode()
 clientSocket.send(data)
 
 
-#Modtager info fra server 2
+#Serveren fortæller hvordan den valgte metode virker
 dataModtag2 = clientSocket.recv(2048)
 sentenceTilbage = dataModtag2.decode()
 print('Modtager tekst ', sentenceTilbage)
 
 
-#Sender besked til server 2
+#Klienten sender valgte metode/tal til serveren. 
 sentence = input ('Indtast linje: ')
 data = sentence.encode()
 clientSocket.send(data)
 
 
-#Modtager info fra server 3
+#Serveren sender det tilfældige tal eller det udregnede regnestykke
+dataModtag3 = clientSocket.recv(2048)
+sentenceTilbage = dataModtag3.decode()
+print('Modtager tekst ', sentenceTilbage)
+
+
+#Serveren fortæller at connectionen er lukket
 dataModtag3 = clientSocket.recv(2048)
 sentenceTilbage = dataModtag3.decode()
 print('Modtager tekst ', sentenceTilbage)

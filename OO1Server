@@ -10,7 +10,7 @@ serverSocket.listen(1)
 
 print ('Server is ready to recieve')
 
-#Metode 
+#Metode til at guide klienten videre.
 def  handleClient(connectionSocket,adress):
     connectionSocket.send('Type "Random" or "Calculator" to start the function'.encode())
     sentence=connectionSocket.recv(1024).decode().lower()
@@ -30,11 +30,11 @@ def  handleClient(connectionSocket,adress):
     else:
         handleWrongCommand(connectionSocket,addr)
 
-    
+#Metode til at fortælle clienten at connection er lukket. 
 def handleClose(connectionSocke,adress):
     connectionSocket.send('Connection ended'.encode())
 
-
+#Metode til at finde et tilfældigt tal
 def handleRandom(connectionSocket,adress):
     connectionSocket.send('Please type 2 number with space between fx:"1 10"'.encode())
     sentence=connectionSocket.recv(1024).decode()
@@ -54,7 +54,7 @@ def handleRandom(connectionSocket,adress):
     print('Client connection closed:',addr)
     connectionSocket.close()
 
-
+#Metode til at plus og minus
 def handleCalculator(connectionSocket,adress):
     connectionSocket.send('This function can Add and Subtract. Please write your command as fx:"Add 2 5" or "Substract 5 2'.encode())
     sentence=connectionSocket.recv(1024).decode()
@@ -85,7 +85,7 @@ def handleCalculator(connectionSocket,adress):
     print('Client connection closed:',addr)
     connectionSocket.close()
 
-
+#Metode hvis client skriver forkert keyword
 def handleWrongCommand(connectionSocket,address):
     connectionSocket.send('You did not type a correct command. Try again'.encode())
     handleClose(connectionSocket,addr)
@@ -100,7 +100,7 @@ while True:
     connectionSocket, addr = serverSocket.accept() 
     print ('Client connection from address:',addr)
     threading.Thread(target=handleClient,args=(connectionSocket,addr)).start()
-    
+
   
 
 
